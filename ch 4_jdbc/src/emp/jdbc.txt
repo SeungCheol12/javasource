@@ -1,0 +1,50 @@
+JDBC 프로그래밍 순서
+1. 드라이버 로드
+Class.forName("oracle.jdbc.OracleDriver"); // 오라클
+Class.forName("com.mysql.cj.jdbc.Driver"); // mysql
+
+2. 커넥션 얻기
+(1) 오라클
+String url = "jdbc:oracle:thin:@localhost:1521:xe";
+String user = "사용자아이디";
+String password = "비밀번호";
+
+(2) mysql
+String url = "jdbc:mysql//localhost:3306/database명";
+ String user = "사용자아이디";
+String password = "비밀번호";
+
+ Connection con = DriverManager.getConnection(url, user, password);
+
+3. SQL 문
+(1) 커넥션을 통해서 실행할 sql 구문 전송
+
+con.preparedStatement("실행할 sql 구문")
+     DB 내부에서는
+     1. sql 구문을 컴파일(구문 분석)        
+     2. 실행계획 세우기
+(2) sql 구문 실행
+    1. select 라면 executeQuery();
+    2. update, delete, insert 라면 executeUpdate();
+(3) 실행할거리 받기
+    1. select 라면 ResultSet 에 담겨져 옴
+    2. update, delete, insert 라면 int 값으로 넘어옴
+
+
+
+
+4. 화면처리
+
+
+
+
+
+
+
+
+
+
+
+
+
+
