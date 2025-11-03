@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.util.Scanner;
 
 public class ProfessorMain {
+    private static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -45,13 +46,37 @@ public class ProfessorMain {
                         System.out.println(rows > 0 ? "입력성공" : "입력실패");
                         break;
                     case 2:
-                        update();
+                        professorDTO = update();
+                        sql = "UPDATE PROFESSOR SET dept_id = ? where prof_id = ?";
+                        pstmt = con.prepareStatement(sql);
+                        pstmt.setString(1, professorDTO.getDeptId());
+                        pstmt.setString(2, professorDTO.getProfId());
+                        rows = pstmt.executeUpdate();
+
+                        System.out.println(rows > 0 ? "수정성공" : "수정실패");
                         break;
                     case 3:
-                        delete();
+                        String profId = delete();
+                        sql = "delete from PROFESSOR where prof_id = ?";
+                        pstmt = con.prepareStatement(sql);
+                        pstmt.setString(1, profId);
+                        rows = pstmt.executeUpdate();
+
+                        System.out.println(rows > 0 ? "삭제성공" : "삭제실패");
                         break;
                     case 4:
-                        select();
+                        profId = select();
+
+                        sql = "select * from PROFESSOR where prof_id = ?";
+
+                        pstmt = con.prepareStatement(sql);
+                        pstmt.setString(1, profId);
+                        rs = pstmt.executeQuery();
+                        while (rs.next()) {
+                            System.out.println("교수 번호 : " + rs.getString("prof_id"));
+                            System.out.println("교수명 : " + rs.getString("prof_name"));
+                            System.out.println("학과 번호 : " + rs.getString("dept_id"));
+                        }
                         break;
                     case 5:
                         run = false;
@@ -68,6 +93,7 @@ public class ProfessorMain {
                 rs.close();
                 pstmt.close();
                 con.close();
+                sc.close();
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -76,7 +102,6 @@ public class ProfessorMain {
     }
 
     public static ProfessorDTO insert() {
-        Scanner sc = new Scanner(System.in);
 
         System.out.print("아이디 입력 >>");
         String profID = sc.nextLine();
@@ -85,17 +110,43 @@ public class ProfessorMain {
         System.out.print("학과 코드 입력 >>");
         String deptId = sc.nextLine();
 
-        sc.close();
-
         return new ProfessorDTO(profID, name, deptId);
     }
 
-    public static void update() {
+    public static ProfessorDTO update() {
+        // 수정할 교수 아이디 받기\
+
+        System.out.println("======== 수정할 교수 정보 ========");
+        System.out.print("교수 번호 >> ");
+        String profId = sc.nextLine();
+        System.out.print("변경할 학과 번호 >> ");
+        String deptId = sc.nextLine();
+
+        ProfessorDTO professorDTO = new ProfessorDTO();
+        professorDTO.setDeptId(deptId);
+        professorDTO.setProfId(profId);
+
+        return professorDTO;
     }
 
-    public static void delete() {
+    public static String delete() {
+        // 삭제할 교수 아이디
+
+        System.out.println("======== 삭제할 교수 정보 ========");
+        System.out.print("교수 번호 >> ");
+        String profId = sc.nextLine();
+
+        return profId;
     }
 
-    public static void select() {
+    public static String select() {
+        // 특정 교수 조회
+
+        System.out.println("======== 교수 조회 ========");
+        System.out.print("교수 번호 >> ");
+        String profId = sc.nextLine();
+
+        return profId;
+
     }
 }
