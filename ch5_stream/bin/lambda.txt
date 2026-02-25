@@ -88,6 +88,10 @@ java.util.fuction 패키지
     - max(Consumer<? super T> comparator)
     - min(Consumer<? super T> comparator)
     - collect(Consumer<T, A, R> collector)
+---------------------------------------------------------------------------
 
+Optional<T>
+OptionalInt
+OptionalDouble
 
 
